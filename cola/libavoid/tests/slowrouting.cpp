@@ -3,13 +3,13 @@ using namespace Avoid;
 int main(void) {
     Router *router = new Router(
             PolyLineRouting | OrthogonalRouting);
-    router->setRoutingPenalty((PenaltyType)0, 50);
-    router->setRoutingPenalty((PenaltyType)1, 0);
-    router->setRoutingPenalty((PenaltyType)2, 0);
-    router->setRoutingPenalty((PenaltyType)3, 0);
-    router->setRoutingPenalty((PenaltyType)4, 110);
+    router->setRoutingPenalty(segmentPenalty, 50);
+    router->setRoutingPenalty(anglePenalty, 0);
+    router->setRoutingPenalty(crossingPenalty, 0);
+    router->setRoutingPenalty(clusterCrossingPenalty, 0);
+    router->setRoutingPenalty(fixedSharedPathPenalty, 110);
     router->setRoutingPenalty((PenaltyType)5, 100);
-    router->setRoutingOption((RoutingOption)0, false);
+    router->setRoutingOption(nudgeOrthogonalSegmentsConnectedToShapes, false);
     router->setRoutingParameter(idealNudgingDistance, 25);
 
 JunctionRef *junctionRef1634752 = new JunctionRef(router, Point(24800, 27000), 1634752);

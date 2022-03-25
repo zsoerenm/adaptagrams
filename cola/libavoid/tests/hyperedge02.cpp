@@ -4,13 +4,13 @@ int main(void) {
     ConnEndList hyperedgeTerminals;
     Router *router = new Router(OrthogonalRouting);
     /*
-    router->setRoutingPenalty((PenaltyType)0, 78.7234);
-    router->setRoutingPenalty((PenaltyType)1, 0);
-    router->setRoutingPenalty((PenaltyType)2, 0);
-    router->setRoutingPenalty((PenaltyType)3, 0);
-    router->setRoutingPenalty((PenaltyType)4, 0);
+    router->setRoutingPenalty(segmentPenalty, 78.7234);
+    router->setRoutingPenalty(anglePenalty, 0);
+    router->setRoutingPenalty(crossingPenalty, 0);
+    router->setRoutingPenalty(clusterCrossingPenalty, 0);
+    router->setRoutingPenalty(fixedSharedPathPenalty, 0);
     router->setRoutingPenalty((PenaltyType)5, 100);
-    router->setRoutingOption((RoutingOption)0, true);
+    router->setRoutingOption(nudgeOrthogonalSegmentsConnectedToShapes, true);
     router->setOrthogonalNudgeDistance(4);
     */
 
