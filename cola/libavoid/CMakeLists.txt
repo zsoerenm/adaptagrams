@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.16)
 
 project(avoid)
 
-option(ENABLE_TESTS "Build tests" OFF)
 option(LIBAVOID_DEBUG "Libavoid debug logs" OFF)
 option(PATH_DEBUG "Routing path debug logs" OFF)
 option(NUDGE_DEBUG "Debug nudging" OFF)
@@ -55,11 +54,9 @@ if (ASTAR_DEBUG)
     add_definitions(-DASTAR_DEBUG)
 endif()
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 if (ENABLE_TESTS)
-    enable_testing()
-
     set(TEST_CASES
         2junctions
         buildOrthogonalChannelInfo1
@@ -140,18 +137,47 @@ if (ENABLE_TESTS)
         tjunct
         treeRootCrash01
         treeRootCrash02
-        unsatisfiableRangeAssertion
+        # temporary disabled because it's very resource consuming
+        # TODO: run only before release?
+        # unsatisfiableRangeAssertion
         validPaths01
         validPaths02
         vertlineassertion
     )
 
+    # old tests without test framework
     foreach(TEST_CASE IN LISTS TEST_CASES)
         # currently tests are just simple apps/executables, no test executor is used
         add_executable(test_avoid_${TEST_CASE} tests/${TEST_CASE}.cpp)
         target_link_libraries(test_avoid_${TEST_CASE} ${PROJECT_NAME})
         target_include_directories(test_avoid_${TEST_CASE} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
+        # 'output' is added to IMAGE_OUTPUT_PATH inside of tests to keep compatibility with Makefile build
+        target_compile_definitions(test_avoid_${TEST_CASE} PRIVATE -DIMAGE_OUTPUT_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/tests/\" -DTEST_DATA_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/tests/\")
+
         add_test(NAME test_avoid_${TEST_CASE}
                 COMMAND test_avoid_${TEST_CASE})
+    endforeach()
+
+    # new tests with test framework
+    set(NEW_TEST_CASES
+        orthogonal/hierarchical)
+    foreach(TEST_CASE IN LISTS NEW_TEST_CASES)
+        set(TARGET_NAME "")
+        string(REPLACE "/" "_" TARGET_NAME ${TEST_CASE})
+        set(FULL_TARGET_NAME ${PROJECT_NAME}_${TARGET_NAME}_test)
+        add_executable(
+                ${FULL_TARGET_NAME}
+                tests/new/${TEST_CASE}.cpp
+        )
+        target_link_libraries(
+                ${FULL_TARGET_NAME}
+                gtest_main
+                gmock_main
+                ${PROJECT_NAME}
+        )
+        # 'output' is added to IMAGE_OUTPUT_PATH inside of tests to keep compatibility with Makefile build
+        target_compile_definitions(${FULL_TARGET_NAME} PRIVATE -DIMAGE_OUTPUT_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/tests/\" -DTEST_DATA_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/tests/\")
+
+        gtest_discover_tests(${FULL_TARGET_NAME})
     endforeach()
 endif()

@@ -4,7 +4,6 @@ project(cola)
 
 set(CMAKE_CXX_STANDARD 17)
 
-option(ENABLE_TESTS "Build tests" OFF)
 option(ENABLE_CAIRO "Cairo support for SVG generation" OFF)
 
 add_library(${PROJECT_NAME}
@@ -26,11 +25,12 @@ add_library(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
-target_link_libraries(${PROJECT_NAME} cairomm-1.0 sigc-3.0 freetype)
+
+if (ENABLE_CAIRO)
+    target_link_libraries(${PROJECT_NAME} cairomm-1.0 sigc-3.0 freetype)
+endif()
 
 if (ENABLE_TESTS)
-    enable_testing()
-
 #    TODO: other test cases
     set(TEST_CASES
 #        boundary
@@ -48,6 +48,7 @@ if (ENABLE_TESTS)
         add_executable(test_${PROJECT_NAME}_${TEST_CASE} tests/${TEST_CASE}.cpp)
         target_include_directories(test_${PROJECT_NAME}_${TEST_CASE} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
         target_link_libraries(test_${PROJECT_NAME}_${TEST_CASE} ${PROJECT_NAME} avoid vpsc topology)
+        target_compile_definitions(test_${PROJECT_NAME}_${TEST_CASE} PRIVATE -DIMAGE_OUTPUT_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/tests/\" -DTEST_DATA_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/tests/\")
         if (ENABLE_CAIRO)
             add_definitions(-DCAIRO_HAS_SVG_SURFACE -DCAIRO_HAS_PDF_SURFACE -DHAVE_CAIROMM)
             target_link_libraries(test_${PROJECT_NAME}_${TEST_CASE} cairomm-1.0 sigc-3.0 freetype)
