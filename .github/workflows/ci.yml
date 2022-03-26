@@ -19,7 +19,9 @@ jobs:
         os: [ubuntu-20.04, macos-11, windows-2022]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Build(cmake)
         run: |
@@ -27,7 +29,7 @@ jobs:
           mkdir -p build
           pushd build
           cmake ..
-          make
+          cmake --build .
           popd
           popd
 
@@ -37,7 +39,7 @@ jobs:
           mkdir -p build_tests
           pushd build_tests
           cmake -DENABLE_TESTS=ON ..
-          make
+          cmake --build .
           ctest --output-on-failure
           popd
           popd
@@ -47,3 +49,10 @@ jobs:
           pushd cola
           ./autogen.sh
           popd
+
+      - name: Build bindings(webassembly)
+        if: runner.os == 'Linux'
+        run: |
+          pushd cola/bindings/webassembly/libavoid-js/
+          npm install
+          python3 ./tools/generate.py
