@@ -92,9 +92,11 @@ Run `./autogen.sh` to compile from scratch.
 Use from other languages
 ------------------------
 
-### WebAssembly
+### Web/Javascript
 
-There are Javascript/WebAssembly bindings of libavoid library available [here][libavoid-js]. 
+* [webcola][webcola] (cola.js) is a JavaScript based rewrite of libcola which works well with [D3.js][d3]
+* [webcola-wasm][webcola-wasm] fork of WebCola partially rewritten in Rust and compiled to WebAssembly
+* [libavoid-js][libavoid-js] Javascript/WebAssembly bindings of C++ libavoid library
 
 ### SWIG (Python & Java)
 
@@ -102,13 +104,10 @@ Bindings for use of the Adaptagrams libraries can be generated using [SWIG][swig
 
 **Current state:** untested and can be buggy([one of issues][swigissue]).
 
-### Cola in the browser
-
-
-[cola.js][webcola] (a.k.a. WebCola) is a JavaScript based rewrite of libcola which works well with [D3.js][d3]
 
 [d3]: https://d3js.org/
 [webcola]: https://ialab.it.monash.edu/webcola/
+[webcola-wasm]: https://github.com/Ameobea/webcola-wasm
 [swig]: http://www.swig.org/
 [td]: https://users.monash.edu/~tdwyer/
 [mw]: https://users.monash.edu/~mwybrow/
