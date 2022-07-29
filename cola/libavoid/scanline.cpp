@@ -193,7 +193,7 @@ void Node::findFirstPointAboveAndBelow(const size_t dim, const double linePos,
             
             if (curr->max[dim] <= min[dim])
             {
-                // Curr shape is completely to the left, 
+                // Curr shape is completely to the left,
                 // so add it's right side as a limit
                 firstAbovePos = std::max(curr->max[dim], firstAbovePos);
             }

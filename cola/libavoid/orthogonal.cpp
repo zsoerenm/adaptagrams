@@ -1441,7 +1441,6 @@ static void processEventVert(Router *router, NodeSet& scanline,
             else
             {
                 // There are overlapping shapes along this shape edge.
-
                 if ((minLimitMax > minLimit) && (minLimitMax >= minShape))
                 {
                     LineSegment *line = segments.insert(
@@ -1601,6 +1600,7 @@ static void processEventHori(Router *router, NodeSet& scanline,
             // As far as we can see.
             double minLimit, maxLimit;
             double minLimitMax, maxLimitMin;
+
             v->findFirstPointAboveAndBelow(YDIM, lineX, minLimit, maxLimit,
                     minLimitMax, maxLimitMin);
 
@@ -1869,6 +1869,7 @@ extern void generateStaticOrthogonalVisGraph(Router *router)
     }
 
     segments.list().sort();
+    // DEBUG HELPER: here you can check horizontal lines, see `segments` variable
 
     // Set up the events for the horizontal sweep.
     SegmentListWrapper vertSegments;
@@ -1938,6 +1939,7 @@ extern void generateStaticOrthogonalVisGraph(Router *router)
             {
                 for (unsigned j = posStartIndex; j < posFinishIndex; ++j)
                 {
+                    // DEBUG HELPER: create vertical lines
                     processEventHori(router, scanline, vertSegments,
                             events[j], pass);
                 }
