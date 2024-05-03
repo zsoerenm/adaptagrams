@@ -516,6 +516,18 @@ std::pair<ConnEnd, ConnEnd> ConnRef::endpointConnEnds(void) const
     return endpoints;
 }
 
+ConnEnd ConnRef::getSourceEndpoint(void) const 
+{
+    std::pair<ConnEnd, ConnEnd> endpoints = endpointConnEnds();
+    return endpoints.first;
+}
+
+ConnEnd ConnRef::getDestEndpoint(void) const 
+{
+    std::pair<ConnEnd, ConnEnd> endpoints = endpointConnEnds();
+    return endpoints.second;
+}
+
 bool ConnRef::setEndpoint(const unsigned int type, const VertID& pointID,
         Point *pointSuggestion)
 {

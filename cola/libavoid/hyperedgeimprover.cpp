@@ -1036,6 +1036,31 @@ HyperedgeNewAndDeletedObjectLists
 
     return result;
 }
+HyperedgeNewAndDeletedObjects
+        HyperedgeImprover::newAndDeletedObjects(void) const
+{
+    HyperedgeNewAndDeletedObjects result;
+    HyperedgeNewAndDeletedObjectLists result_lists = newAndDeletedObjectLists();
+
+    JunctionRefVector new_junctions{ std::begin(result_lists.newJunctionList), std::end(result_lists.newJunctionList) };
+    JunctionRefVector deleted_junctions{ std::begin(result_lists.deletedJunctionList), std::end(result_lists.deletedJunctionList) };
+    ConnRefVector new_connectors{ std::begin(result_lists.newConnectorList), std::end(result_lists.newConnectorList) };
+    ConnRefVector deleted_connectors{ std::begin(result_lists.deletedConnectorList), std::end(result_lists.deletedConnectorList) };
+    ConnRefVector changed_connectors{ std::begin(result_lists.changedConnectorList), std::end(result_lists.changedConnectorList) };
+
+    result.newJunctions = new_junctions;
+    result.numberOfNewJunctions = new_junctions.size();
+    result.deletedJunctions = deleted_junctions;
+    result.numberOfDeletedJunctions = deleted_junctions.size();
+    result.newConnectors = new_connectors;
+    result.numberOfNewConnectors = new_connectors.size();
+    result.deletedConnectors = deleted_connectors;
+    result.numberOfDeletedConnectors = deleted_connectors.size();
+    result.changedConnectors = changed_connectors;
+    result.numberOfNewConnectors = changed_connectors.size();
+
+    return result;
+}
 
 
 // This method moves the junction at the given node along any shared paths

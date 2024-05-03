@@ -45,9 +45,11 @@ class VertInf;
 
 //! @brief   A list of ConnEnd objects.
 typedef std::list<ConnEnd> ConnEndList;
+typedef std::vector<ConnEnd> ConnEndVector;
 
 //! @brief   A list of ConnRef objects.
 typedef std::list<ConnRef *> ConnRefList;
+typedef std::vector<ConnRef *> ConnRefVector;
 
 //! @brief   A list of JunctionRef objects.
 typedef std::list<JunctionRef *> JunctionRefList;
@@ -92,6 +94,34 @@ struct HyperedgeNewAndDeletedObjectLists
         
         //! A list of changed connectors.
         ConnRefList      changedConnectorList;
+};
+
+struct HyperedgeNewAndDeletedObjects
+{
+        //! A list of newly created junctions.
+        JunctionRefVector newJunctions;
+
+        size_t numberOfNewJunctions;
+
+        //! A list of newly created connectors.
+        ConnRefVector newConnectors;
+
+        size_t numberOfNewConnectors;
+        
+        //! A list of deleted junctions.
+        JunctionRefVector  deletedJunctions;
+
+        size_t numberOfDeletedJunctions;
+
+        //! A list of deleted connectors.
+        ConnRefVector deletedConnectors;
+
+        size_t numberOfDeletedConnectors;
+        
+        //! A list of changed connectors.
+        ConnRefVector changedConnectors;
+
+        size_t numberOfChangedConnectors;
 };
 
 
@@ -146,6 +176,7 @@ class AVOID_EXPORT HyperedgeRerouter
         //!         resulting routing of the hyperedge.
         //!
         size_t registerHyperedgeForRerouting(ConnEndList terminals);
+        size_t registerHyperedgeForReroutingViaVector(ConnEndVector terminals);
 
         //! @brief  Registers a hyperedge to be fully rerouted the next time
         //!         the router processes a transaction.
@@ -180,6 +211,9 @@ class AVOID_EXPORT HyperedgeRerouter
         //!         junctions and connectors created and deleted.
         //!
         HyperedgeNewAndDeletedObjectLists newAndDeletedObjectLists(
+                size_t index) const;
+
+        HyperedgeNewAndDeletedObjects newAndDeletedObjects(
                 size_t index) const;
 
         // @brief  The number of hyperedges that are being or have been

@@ -73,9 +73,33 @@ ShapeConnectionPin::ShapeConnectionPin(ShapeRef *shape,
     commonInitForShapeConnection();
 }
 
-
 void ShapeConnectionPin::commonInitForShapeConnection(void)
 {
+    checkOffset();
+    m_router = m_shape->router();
+    m_shape->addConnectionPin(this);
+    
+    // Create a visibility vertex for this ShapeConnectionPin.
+    VertID id(m_shape->id(), kShapeConnectionPin, 
+            VertID::PROP_ConnPoint | VertID::PROP_ConnectionPin);
+    m_vertex = new VertInf(m_router, id, this->position());
+    m_vertex->visDirections = this->directions();
+    
+    if (m_vertex->visDirections == ConnDirAll)
+    {
+        // A pin with visibility in all directions is not exclusive 
+        // by default.
+        m_exclusive = false;
+    }
+
+    if (m_router->m_allows_polyline_routing)
+    {
+        vertexVisibility(m_vertex, nullptr, true, true);
+    }
+}
+
+void ShapeConnectionPin::checkOffset(void) {
+
     COLA_ASSERT(m_shape != nullptr);
     COLA_ASSERT(m_class_id > 0);
 
@@ -110,29 +134,26 @@ void ShapeConnectionPin::commonInitForShapeConnection(void)
                     shapeBox.height());
         }
     }
-
-    m_router = m_shape->router();
-    m_shape->addConnectionPin(this);
-    
-    // Create a visibility vertex for this ShapeConnectionPin.
-    VertID id(m_shape->id(), kShapeConnectionPin, 
-            VertID::PROP_ConnPoint | VertID::PROP_ConnectionPin);
-    m_vertex = new VertInf(m_router, id, this->position());
-    m_vertex->visDirections = this->directions();
-    
-    if (m_vertex->visDirections == ConnDirAll)
-    {
-        // A pin with visibility in all directions is not exclusive 
-        // by default.
-        m_exclusive = false;
-    }
-
-    if (m_router->m_allows_polyline_routing)
-    {
-        vertexVisibility(m_vertex, nullptr, true, true);
-    }
 }
 
+void ShapeConnectionPin::updateRelativePosition(const Point& newPosition) {
+    m_x_offset = newPosition.x;
+    m_y_offset = newPosition.y;
+
+    checkOffset();
+
+    updatePositionAndVisibility();
+    m_router = m_shape->router();
+    m_router->modifyConnectionPin(this);
+}
+
+void ShapeConnectionPin::updateVisibility(const ConnDirFlags visDirs) {
+    m_visibility_directions = visDirs;
+
+    updatePositionAndVisibility();
+    m_router = m_shape->router();
+    m_router->modifyConnectionPin(this);
+}
 
 ShapeConnectionPin::ShapeConnectionPin(JunctionRef *junction, 
         const unsigned int classId, const ConnDirFlags visDirs)

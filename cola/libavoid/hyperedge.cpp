@@ -57,6 +57,13 @@ size_t HyperedgeRerouter::registerHyperedgeForRerouting(
     return m_terminals_vector.size() - 1;
 }
 
+size_t HyperedgeRerouter::registerHyperedgeForReroutingViaVector(
+        ConnEndVector terminals)
+{
+    ConnEndList terminal_list(terminals.begin(), terminals.end());
+    return registerHyperedgeForRerouting(terminal_list);
+}
+
 size_t HyperedgeRerouter::registerHyperedgeForRerouting(
         JunctionRef *junction)
 {
@@ -82,6 +89,30 @@ HyperedgeNewAndDeletedObjectLists HyperedgeRerouter::newAndDeletedObjectLists(
     result.deletedJunctionList = m_deleted_junctions_vector[index];
     result.newConnectorList = m_new_connectors_vector[index];
     result.deletedConnectorList = m_deleted_connectors_vector[index];
+
+    return result;
+}
+
+HyperedgeNewAndDeletedObjects HyperedgeRerouter::newAndDeletedObjects(
+        size_t index) const
+{
+    HyperedgeNewAndDeletedObjects result;
+
+    HyperedgeNewAndDeletedObjectLists result_lists = newAndDeletedObjectLists(index);
+    JunctionRefVector new_junctions{ std::begin(result_lists.newJunctionList), std::end(result_lists.newJunctionList) };
+    JunctionRefVector deleted_junctions{ std::begin(result_lists.deletedJunctionList), std::end(result_lists.deletedJunctionList) };
+    ConnRefVector new_connectors{ std::begin(result_lists.newConnectorList), std::end(result_lists.newConnectorList) };
+    ConnRefVector deleted_connectors{ std::begin(result_lists.deletedConnectorList), std::end(result_lists.deletedConnectorList) };
+
+    result.newJunctions = new_junctions;
+    result.numberOfNewJunctions = new_junctions.size();
+    result.deletedJunctions = deleted_junctions;
+    result.numberOfDeletedJunctions = deleted_junctions.size();
+    result.newConnectors = new_connectors;
+    result.numberOfNewConnectors = new_connectors.size();
+    result.deletedConnectors = deleted_connectors;
+    result.numberOfDeletedConnectors = deleted_connectors.size();
+    result.numberOfChangedConnectors = 0;
 
     return result;
 }
