@@ -34,6 +34,7 @@ namespace Avoid {
 
 struct HyperedgeTreeNode;
 struct HyperedgeTreeEdge;
+struct HyperedgeNewAndDeletedObjects;
 class HyperedgeShiftSegment;
 class ConnRef;
 class JunctionRef;
@@ -62,6 +63,7 @@ public:
     // Returns lists of junctions and connectors created and deleted during 
     // hyperedge improvement.
     HyperedgeNewAndDeletedObjectLists newAndDeletedObjectLists(void) const;
+    HyperedgeNewAndDeletedObjects newAndDeletedObjects(void) const;
 
     // Execute local improvement process.
     void execute(bool canMakeMajorChanges);

@@ -339,6 +339,9 @@ class AVOID_EXPORT ConnRef
         //!
         std::pair<ConnEnd, ConnEnd> endpointConnEnds(void) const;
 
+        ConnEnd getSourceEndpoint(void) const;
+        ConnEnd getDestEndpoint(void) const;
+
         // @brief   Returns the source endpoint vertex in the visibility graph.
         // @returns The source endpoint vertex.
         VertInf *src(void) const;

@@ -3114,6 +3114,11 @@ HyperedgeNewAndDeletedObjectLists
 {
     return m_hyperedge_improver.newAndDeletedObjectLists();
 }
+HyperedgeNewAndDeletedObjects 
+        Router::newAndDeletedObjectsFromHyperedgeImprovement(void) const
+{
+    return m_hyperedge_improver.newAndDeletedObjects();
+}
 
 
 ConnRerouteFlagDelegate::ConnRerouteFlagDelegate()

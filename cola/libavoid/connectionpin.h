@@ -242,6 +242,9 @@ class AVOID_EXPORT ShapeConnectionPin
         //!
         bool isExclusive(void) const;
 
+        void updateRelativePosition(const Point& newPosition);
+        void updateVisibility(ConnDirFlags visDirs);
+
         ConnectionPinIds ids(void) const;
 
         bool operator==(const ShapeConnectionPin& rhs) const;
@@ -254,6 +257,7 @@ class AVOID_EXPORT ShapeConnectionPin
         friend class Router;
  
         void commonInitForShapeConnection(void);
+        void checkOffset(void);
         void updatePosition(const Point& newPosition);
         void updatePosition(const Polygon& newPoly);
         void updatePositionAndVisibility(void);

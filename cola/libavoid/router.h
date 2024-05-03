@@ -761,6 +761,8 @@ class AVOID_EXPORT Router {
         //!
         HyperedgeNewAndDeletedObjectLists 
                 newAndDeletedObjectListsFromHyperedgeImprovement(void) const;
+        HyperedgeNewAndDeletedObjects 
+                newAndDeletedObjectsFromHyperedgeImprovement(void) const;
 
         void setDebugHandler(DebugHandler *handler);
         DebugHandler *debugHandler(void) const;
