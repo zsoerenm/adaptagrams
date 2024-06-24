@@ -172,6 +172,7 @@ class AVOID_EXPORT ConnEnd
         //!                                   junction's junctionRef.
         //!
         ConnEnd(JunctionRef *junctionRef);
+        static ConnEnd createConnEndFromJunctionRef(JunctionRef *junctionRef);
 
 
         //! @brief Returns the kind of connection this ConnEnd represents.

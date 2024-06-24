@@ -105,6 +105,9 @@ ConnEnd::ConnEnd(JunctionRef *junctionRef)
     m_point = m_anchor_obj->position();
 }
 
+ConnEnd ConnEnd::createConnEndFromJunctionRef(JunctionRef *junctionRef) {
+    return ConnEnd(junctionRef);
+}
 
 ConnEnd::~ConnEnd()
 {
