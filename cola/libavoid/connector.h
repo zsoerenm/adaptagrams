@@ -314,6 +314,14 @@ class AVOID_EXPORT ConnRef
         //!                         connector will attempt to route via.
         void setRoutingCheckpoints(const std::vector<Checkpoint>& checkpoints);
 
+        void removeCheckpoints(void);
+
+        void removeCheckpoint(const unsigned int index);
+
+        void addCheckpoint(const Checkpoint& checkpoint);
+
+        void changeCheckpoint(const unsigned int index, const Checkpoint& checkpoint);
+
         //! @brief   Returns the current set of routing checkpoints for this
         //!          connector.
         //! @returns The ordered list of Checkpoints that this connector will 
