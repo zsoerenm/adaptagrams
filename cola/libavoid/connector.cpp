@@ -192,6 +192,52 @@ std::vector<Checkpoint> ConnRef::routingCheckpoints(void) const
     return m_checkpoints;
 }
 
+void ConnRef::addCheckpoint(const Checkpoint& checkpoint)
+{
+    m_checkpoints.push_back(checkpoint);
+
+    size_t i = m_checkpoints.size();
+
+    VertID ptID(m_id, 2 + i, 
+            VertID::PROP_ConnPoint | VertID::PROP_ConnCheckpoint);
+    VertInf *vertex = new VertInf(m_router, ptID, m_checkpoints[i].point);
+    vertex->visDirections = ConnDirAll;
+
+    m_checkpoint_vertices.push_back(vertex);
+
+    if (m_router->m_allows_polyline_routing)
+    {
+        vertexVisibility(m_checkpoint_vertices[i], nullptr, true, true);
+    }
+}
+
+void ConnRef::removeCheckpoints(void)
+{
+    m_checkpoints.clear();
+    for (size_t i = 0; i < m_checkpoint_vertices.size(); ++i)
+    {
+        m_checkpoint_vertices[i]->removeFromGraph(true);
+        m_router->vertices.removeVertex(m_checkpoint_vertices[i]);
+        delete m_checkpoint_vertices[i];
+    }
+    m_checkpoint_vertices.clear();
+}
+
+void ConnRef::removeCheckpoint(const unsigned int index)
+{
+    m_checkpoints.erase(m_checkpoints.begin() + index);
+
+    m_checkpoint_vertices.at(index)->removeFromGraph(true);
+    m_router->vertices.removeVertex(m_checkpoint_vertices.at(index));
+    delete m_checkpoint_vertices.at(index);
+    m_checkpoint_vertices.erase(m_checkpoint_vertices.begin() + index);
+}
+
+void ConnRef::changeCheckpoint(const unsigned int index, const Checkpoint& checkpoint)
+{
+    m_checkpoints.at(index) = checkpoint;
+    m_checkpoint_vertices.at(index)->point = checkpoint.point;
+}
 
 void ConnRef::setRoutingCheckpoints(const std::vector<Checkpoint>& checkpoints)
 {
